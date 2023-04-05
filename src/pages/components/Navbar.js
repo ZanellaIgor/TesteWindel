@@ -15,7 +15,7 @@ const Navbar = () => {
     return (
         <Flex
         >
-            <List variant="customStyle"
+            <List
                 height='100%'
                 width='100%'
                 padding='5px'

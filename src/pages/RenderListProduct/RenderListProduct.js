@@ -7,19 +7,14 @@ import {
     Tr,
     Th,
     Td,
-    TableCaption,
-    TableContainer,
     Input,
-    FormControl,
     Flex,
     FormLabel,
     Heading,
     Image,
-    background,
     Box,
     Spacer,
     Button,
-    List,
 } from '@chakra-ui/react'
 
 import React, { useEffect, useState } from "react";
@@ -41,8 +36,12 @@ const RenderListProduct = () => {
     const [desc, setDesc] = useState("");
     const [ref, setRef] = useState("");
     const [fab, setFab] = useState("");
+
+    //Filter dos produtos
     const [filterProduct, setFilterProduct] = useState([])
 
+    //Paginação
+    const [currentPage, setCurrentPage] = useState(1);
 
     const baseURL = "https://homologacao.windel.com.br:3000/teste-front"
 
@@ -69,12 +68,13 @@ const RenderListProduct = () => {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-    const [currentPage, setCurrentPage] = useState(1);
+    //const sortedProducts = produtos.sort((a, b) => a.name.localeCompare(b.name));
     const totalPages = Math.ceil(filterProduct.length / PAGE_SIZE);
     const startIndex = (currentPage - 1) * PAGE_SIZE;
     const productsToDisplay = filterProduct.slice(startIndex, startIndex + PAGE_SIZE);
 
 
+//ordenacao
 
 
 
@@ -93,6 +93,7 @@ const RenderListProduct = () => {
 
     useEffect(() => {
         filterProducts();
+        setCurrentPage(1)
     }, [desc, ref, fab, produtos])
 
     function filterProducts() {
@@ -189,8 +190,7 @@ const RenderListProduct = () => {
                         {productsToDisplay.map(produto => (
                             <Tr
                                 key={produto.id}
-                                bg='gray'
-                                border='1px solid gray'
+                                
                                 borderRadius='8px'
                                 _hover={{
                                     bg: 'cyan.400',
@@ -219,9 +219,9 @@ const RenderListProduct = () => {
                 </Table>
                 <div>
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                        <button key={page} onClick={() => handlePageChange(page)}>
+                        <Button key={page} onClick={() => handlePageChange(page)}>
                             {page}
-                        </button>
+                        </Button>
                     ))}
                 </div>
             </Box>

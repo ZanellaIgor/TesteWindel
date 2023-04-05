@@ -18,13 +18,12 @@ const ProductRoutes = () => {
                 h="100vh"
                 templateRows="auto 1fr auto"
                 templateColumns="180px auto"
-                gap={1}
+                
             >
-                <GridItem rowSpan={1} colSpan={2} bg = ' blue.500 '>
+                <GridItem rowSpan={1} colSpan={2} bg = ' #B8D6FF '>
                     <Header />
                 </GridItem>
-                <GridItem rowSpan={1} colSpan={1} bg = ' #B8D6FF ' border='1px solid ' borderRadius='0 8px 8px 0'
-                >
+                <GridItem rowSpan={1} colSpan={1} bg = ' #B8D6FF ' border='1px solid #B8D6FF' >
                     <Navbar/>
                 </GridItem>
               
