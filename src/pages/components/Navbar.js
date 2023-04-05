@@ -18,7 +18,7 @@ const Navbar = () => {
             <List variant="customStyle"
                 height='100%'
                 width='100%'
-                padding='10px'
+                padding='5px'
                 margin='5px'
             >
                 {navItens.map((navIten) => (

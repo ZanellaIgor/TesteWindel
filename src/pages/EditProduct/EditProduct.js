@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FormLabel, Input, Box, FormControl, Button, Grid, Flex, Spacer, Heading } from '@chakra-ui/react'
+import { FormLabel, Input, Box, FormControl, Button, Grid, Flex, Spacer, Heading, Image } from '@chakra-ui/react'
 
 
 const EditProduct = () => {
@@ -71,7 +71,16 @@ const EditProduct = () => {
             padding='10px'
             
         >
-            <Heading>Edite seu produto:</Heading>
+            <Heading as='h3' m='10px'
+                p='10px'>Edite seu produto:</Heading>
+            <Flex
+                justifyContent='space-between'
+                border='1px solid black'
+                borderRadius='lg'
+                m='10px'
+                p='10px'>
+
+
             <form
                 style={{ display: "flex", flexWrap: "wrap", alignItems: 'space-around'}}>
 
@@ -145,7 +154,17 @@ const EditProduct = () => {
                     justifyContent="space-between">
                     <Button alignSelf="flex-end" type='button' onClick={handleEditProduct}>Editar</Button>
                 </FormControl>
+                <Image 
+                display='flex'
+                src={produto.imagemProduto} boxSize='200px' 
+                border='1px solid black'
+                borderRadius='8px'
+                justifyContent='center'
+                />
+                
             </form>
+          
+            </Flex>
 
         </Flex>
     )

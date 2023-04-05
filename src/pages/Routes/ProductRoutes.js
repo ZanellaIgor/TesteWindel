@@ -20,7 +20,7 @@ const ProductRoutes = () => {
                 templateColumns="180px auto"
                 gap={1}
             >
-                <GridItem rowSpan={1} colSpan={2} bg = ' blue.500 ' borderRadius='8px 0px'>
+                <GridItem rowSpan={1} colSpan={2} bg = ' blue.500 '>
                     <Header />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={1} bg = ' #B8D6FF ' border='1px solid ' borderRadius='0 8px 8px 0'

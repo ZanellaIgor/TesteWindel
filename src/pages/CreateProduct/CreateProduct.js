@@ -58,7 +58,16 @@ const CreateProduct = () => {
             flexDirection='column'
             padding='10px'
         >
-            <Heading>Crie seu produto:</Heading>
+            <Heading as='h3' m='10px'
+                p='10px'>Crie seu produto:</Heading>
+             <Flex
+                justifyContent='space-between'
+                border='1px solid black'
+                borderRadius='lg'
+                m='10px'
+                p='10px'>
+
+
             <form
                 style={{ display: "flex", flexWrap: "wrap", alignItems: 'space-around' }}>
 
@@ -133,6 +142,7 @@ const CreateProduct = () => {
                     <Button alignSelf="flex-end" type='button' onClick={handleClickForm}>Criar</Button>
                 </FormControl>
             </form>
+            </Flex>
 
         </Flex>
     )

@@ -33,6 +33,8 @@ import { FaListUl } from 'react-icons/fa'
 import { FiEdit } from 'react-icons/fi'
 import { Link } from "react-router-dom";
 
+const PAGE_SIZE = 5;
+
 const RenderListProduct = () => {
 
     const [produtos, setProdutos] = useState([]);
@@ -40,14 +42,48 @@ const RenderListProduct = () => {
     const [ref, setRef] = useState("");
     const [fab, setFab] = useState("");
     const [filterProduct, setFilterProduct] = useState([])
-    const [render, setRender] = useState(false)
+
 
     const baseURL = "https://homologacao.windel.com.br:3000/teste-front"
+
+
+
+    // function count() {
+    //     axios.get(`${baseURL}/count`)
+    //         .then((response) => {
+    //             console.log(response.data)
+    //             totProducts = response.data
+
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //         });
+    //     const maxPages = 3;
+    //     const productsPage = 10;
+    //     actual= 6;
+    //     const maxPagesLeft = (maxPages -1 ) / 2;
+    //     const pageActual = actual ? ((actual / productsPage) +1) : 1;
+    //     const pages = Math.ceil(totProducts/productsPage);
+    //     const page = Math.max(pageActual - maxPagesLeft, 1);
+    // }
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+    const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = Math.ceil(filterProduct.length / PAGE_SIZE);
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const productsToDisplay = filterProduct.slice(startIndex, startIndex + PAGE_SIZE);
+
+
+
+
 
     useEffect(() => {
         axios.get(baseURL)
             .then((response) => {
+                console.log(response.length)
                 setProdutos(response.data)
+                //count()
             })
             .catch((error) => {
                 console.error(error);
@@ -101,8 +137,8 @@ const RenderListProduct = () => {
 
     return (
         <Box
-       >
-            <Flex justifyContent='space-between'  m='10px' p='10px'>
+        >
+            <Flex justifyContent='space-between' m='10px' p='10px'>
                 <Heading as='h3'>Produtos:</Heading>
                 <Link to='/Produtos/Criar_Produto'><Button>Adicionar Produto</Button></Link>
             </Flex>
@@ -126,7 +162,7 @@ const RenderListProduct = () => {
                     <Input type="text" value={fab} onChange={(e) => setFab(e.target.value)} />
                 </FormLabel>
 
-                <Button  mt='22px'  onClick={clearFilter}>Limpar Filtros</Button>
+                <Button mt='22px' onClick={clearFilter}>Limpar Filtros</Button>
             </Flex>
 
             <Box
@@ -149,8 +185,8 @@ const RenderListProduct = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        
-                        {filterProduct.map(produto => (
+
+                        {productsToDisplay.map(produto => (
                             <Tr
                                 key={produto.id}
                                 bg='gray'
@@ -181,6 +217,13 @@ const RenderListProduct = () => {
                         ))}
                     </Tbody>
                 </Table>
+                <div>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button key={page} onClick={() => handlePageChange(page)}>
+                            {page}
+                        </button>
+                    ))}
+                </div>
             </Box>
         </Box>
     )
