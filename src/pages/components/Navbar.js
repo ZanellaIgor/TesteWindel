@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import theme from '../../styles/theme';
 
 const navItens = [
-    { id: 1, name: 'Home', icon: '', link: '/', },
-    { id: 2, name: 'Criar Produtos', icon: '', link: '/Produtos/Criar_Produto' },
-    { id: 3, name: 'Lista de Produtos', icon: '', link: '/Produtos' },
-    { id: 4, name: 'Grafico', icon: '', link: 'Grafico', },
-    { id: 5, name: 'About', icon: '', link: '/About', },
-    { id: 6, name: 'Sair', icon: '', link: "", },
+    {name: 'Home', icon: '', link: '/', },
+    {name: 'Criar Produtos', icon: '', link: '/Produtos/Criar_Produto' },
+    {name: 'Lista de Produtos', icon: '', link: '/Produtos' },
+    {name: 'Grafico', icon: '', link: 'Grafico', },
+    {name: 'About', icon: '', link: '/About', },
+    {name: 'Sair', icon: '', link: "", },
 ];
 
 const Navbar = () => {
@@ -23,7 +23,7 @@ const Navbar = () => {
             >
                 {navItens.map((navIten) => (
                     <Link to={navIten.link}>
-                        <ListItem key={navIten.id}
+                        <ListItem key={navIten.index}
                             padding='10px'
                             margin='5px'
                             align="left"

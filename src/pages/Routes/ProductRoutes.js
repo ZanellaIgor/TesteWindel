@@ -17,10 +17,9 @@ const ProductRoutes = () => {
             <Grid
                 h="100vh"
                 templateRows="auto 1fr auto"
-                templateColumns="180px auto"
-                
+                templateColumns="180px auto"    
             >
-                <GridItem rowSpan={1} colSpan={2} bg = ' #B8D6FF '>
+                <GridItem rowSpan={1} colSpan={2} bg = ' #B8D6FF ' boxShadow="md" zIndex='10'>
                     <Header />
                 </GridItem>
                 <GridItem rowSpan={1} colSpan={1} bg = ' #B8D6FF ' border='1px solid #B8D6FF' >

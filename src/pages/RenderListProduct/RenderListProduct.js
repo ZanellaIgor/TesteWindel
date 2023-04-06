@@ -1,9 +1,7 @@
 import {
-    Grid,
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
@@ -15,6 +13,7 @@ import {
     Box,
     Spacer,
     Button,
+    CircularProgress, CircularProgressLabel, Center
 } from '@chakra-ui/react'
 
 import React, { useEffect, useState } from "react";
@@ -43,6 +42,7 @@ const RenderListProduct = () => {
     //Paginação
     const [currentPage, setCurrentPage] = useState(1);
 
+    const [load, setLoad] = useState(true)
     const baseURL = "https://homologacao.windel.com.br:3000/teste-front"
 
 
@@ -74,7 +74,7 @@ const RenderListProduct = () => {
     const productsToDisplay = filterProduct.slice(startIndex, startIndex + PAGE_SIZE);
 
 
-//ordenacao
+    //ordenacao
 
 
 
@@ -94,12 +94,13 @@ const RenderListProduct = () => {
     useEffect(() => {
         filterProducts();
         setCurrentPage(1)
+        setLoad(false)
     }, [desc, ref, fab, produtos])
 
     function filterProducts() {
         const filterProduct = produtos.filter((produto) => {
             console.log(desc)
-            if (desc == "" && ref == "" && fab == "") {
+            if (desc === "" && ref === "" && fab === "") {
                 return true;
             }
             if (desc && !produto.nome.toLowerCase().includes(desc.toLowerCase())) {
@@ -166,12 +167,18 @@ const RenderListProduct = () => {
                 <Button mt='22px' onClick={clearFilter}>Limpar Filtros</Button>
             </Flex>
 
+            {load && <Center>
+                <CircularProgress isIndeterminate color='green.300' size='250px'>
+                    <CircularProgressLabel>Aguarde</CircularProgressLabel>
+                </CircularProgress>
+            </Center>}
             <Box
                 border='1px solid black'
                 borderRadius='lg'
                 m='10px'
                 p='10px'
             >
+
                 <Table
                 >
                     <Thead>
@@ -190,7 +197,7 @@ const RenderListProduct = () => {
                         {productsToDisplay.map(produto => (
                             <Tr
                                 key={produto.id}
-                                
+
                                 borderRadius='8px'
                                 _hover={{
                                     bg: 'cyan.400',
@@ -219,7 +226,9 @@ const RenderListProduct = () => {
                 </Table>
                 <div>
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                        <Button key={page} onClick={() => handlePageChange(page)}>
+                        <Button key={page}
+                            onClick={() => handlePageChange(page)}
+                            isActive={currentPage === page}>
                             {page}
                         </Button>
                     ))}
