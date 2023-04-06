@@ -83,6 +83,7 @@ const RenderListProduct = () => {
             .then((response) => {
                 console.log(response.length)
                 setProdutos(response.data)
+                setLoad(false)
                 //count()
             })
             .catch((error) => {
@@ -94,7 +95,7 @@ const RenderListProduct = () => {
     useEffect(() => {
         filterProducts();
         setCurrentPage(1)
-        setLoad(false)
+        
     }, [desc, ref, fab, produtos])
 
     function filterProducts() {
@@ -172,13 +173,12 @@ const RenderListProduct = () => {
                     <CircularProgressLabel>Aguarde</CircularProgressLabel>
                 </CircularProgress>
             </Center>}
-            <Box
+           {!load && <Box
                 border='1px solid black'
                 borderRadius='lg'
                 m='10px'
                 p='10px'
             >
-
                 <Table
                 >
                     <Thead>
@@ -233,7 +233,7 @@ const RenderListProduct = () => {
                         </Button>
                     ))}
                 </div>
-            </Box>
+            </Box>}
         </Box>
     )
 }
