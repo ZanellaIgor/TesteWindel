@@ -36,9 +36,9 @@ const ProductRoutes = () => {
                         <Route path='/Produtos/Editar_Produto/:id' element={<EditProduct />} />
                     </Routes>
                 </GridItem>
-                <GridItem rowSpan={1} colSpan={1}>
+                {/* <GridItem rowSpan={1} colSpan={1}>
                     <Footer />
-                </GridItem>
+                </GridItem> */}
             </Grid>
         </BrowserRouter>
     )

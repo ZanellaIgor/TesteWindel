@@ -38,10 +38,11 @@ const RenderListProduct = () => {
 
     //Filter dos produtos
     const [filterProduct, setFilterProduct] = useState([])
-
+    const [productsFilter, setProductsFilter] = useState([])
     //Paginação
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalProducts, setTotalProducts] =useState("");
+    const [totalProducts, setTotalProducts] = useState("");
+
 
     const [load, setLoad] = useState(true)
     const baseURL = "https://homologacao.windel.com.br:3000/teste-front"
@@ -51,10 +52,10 @@ const RenderListProduct = () => {
         setCurrentPage(pageNumber);
     };
     //const sortedProducts = produtos.sort((a, b) => a.name.localeCompare(b.name));
-    
-    const totalPages = filterProduct.length >0 ? Math.ceil(filterProduct.length / PAGE_SIZE) : Math.ceil(totalProducts / PAGE_SIZE);
+
+    const totalPages = filterProduct.length > 0 ? Math.ceil(filterProduct.length / PAGE_SIZE) : Math.ceil(totalProducts / PAGE_SIZE);
     const startIndex = (currentPage - 1) * PAGE_SIZE;
-    const productsToDisplay = filterProduct.length >0 ? (filterProduct.slice(startIndex, startIndex + PAGE_SIZE)) : (produtos);
+    const productsToDisplay = filterProduct.length > 0 ? (filterProduct.slice(startIndex, startIndex + PAGE_SIZE)) : (produtos);
 
     // const totalPages = filterProduct.length >1 ? Math.ceil(filterProduct.length / PAGE_SIZE) : Math.ceil(produtos.length / PAGE_SIZE);
     // const startIndex = (currentPage - 1) * PAGE_SIZE;
@@ -62,28 +63,27 @@ const RenderListProduct = () => {
 
 
     //ordenacao
-    
+
 
     useEffect(() => {
         axios.all([
             axios.get((`${baseURL}/pagination/${currentPage}`)),
             axios.get((`${baseURL}/count`)),
-           // axios.get(`${baseURL}/}`)
-            
+            axios.get(`${baseURL}`)
+
         ])
-         .then(axios.spread((responseData,responseCount) => {
-             setProdutos(responseData.data)
-             setTotalProducts(responseCount.data)
-             console.log(produtos)
-             setLoad(false)
-             
-         }))
-         .catch((error) => {
-             console.error(error);
-         });
+            .then(axios.spread((responseData, responseCount, responseDataFilter) => {
+                setProdutos(responseData.data)
+                setTotalProducts(responseCount.data)
+                setProductsFilter(responseDataFilter.data)
+                setLoad(false)
 
- },[currentPage]);
+            }))
+            .catch((error) => {
+                console.error(error);
+            });
 
+    }, [currentPage]);
 
     // useEffect(() => {
     //        axios.get(`${baseURL}/pagination/${currentPage}`)
@@ -103,14 +103,14 @@ const RenderListProduct = () => {
 
     useEffect(() => {
         filterProducts();
-        
-    }, [desc, ref, fab, produtos])
+        setCurrentPage(1);
+    }, [desc, ref, fab])
 
     function filterProducts() {
-        const filterProduct = produtos.filter((produto) => {
-            if (desc === "" && ref === "" && fab === "") {
-                return false;
-            }
+        const filterProduct = productsFilter.filter((produto) => {
+            // if (desc === "" && ref === "" && fab === "") {
+            //     return false;
+            // }
             if (desc && !produto.nome.toLowerCase().includes(desc.toLowerCase())) {
                 return false;
             }
@@ -121,6 +121,7 @@ const RenderListProduct = () => {
                 return false;
             }
             return true;
+            
         });
         setFilterProduct(filterProduct);
     }
@@ -177,7 +178,7 @@ const RenderListProduct = () => {
                     <CircularProgressLabel>Aguarde</CircularProgressLabel>
                 </CircularProgress>
             </Center>}
-           {!load && <Box
+            {!load && <Box
                 border='1px solid black'
                 borderRadius='lg'
                 m='10px'
