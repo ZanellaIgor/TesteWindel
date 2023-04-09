@@ -27,7 +27,7 @@ import { FaListUl } from 'react-icons/fa'
 import { FiEdit } from 'react-icons/fi'
 import { Link } from "react-router-dom";
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 
 const RenderListProduct = () => {
 
@@ -41,68 +41,75 @@ const RenderListProduct = () => {
 
     //Paginação
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalProducts, setTotalProducts] =useState("");
 
     const [load, setLoad] = useState(true)
     const baseURL = "https://homologacao.windel.com.br:3000/teste-front"
 
+    const handlePageChange = (pageNumber) => {
+        setLoad(true)
+        setCurrentPage(pageNumber);
+    };
+    //const sortedProducts = produtos.sort((a, b) => a.name.localeCompare(b.name));
+    
+    const totalPages = filterProduct.length >0 ? Math.ceil(filterProduct.length / PAGE_SIZE) : Math.ceil(totalProducts / PAGE_SIZE);
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const productsToDisplay = filterProduct.length >0 ? (filterProduct.slice(startIndex, startIndex + PAGE_SIZE)) : (produtos);
+
+    // const totalPages = filterProduct.length >1 ? Math.ceil(filterProduct.length / PAGE_SIZE) : Math.ceil(produtos.length / PAGE_SIZE);
+    // const startIndex = (currentPage - 1) * PAGE_SIZE;
+    // const productsToDisplay = filterProduct.length >1 ? (filterProduct.slice(startIndex, startIndex + PAGE_SIZE)) : (produtos.slice(startIndex, startIndex + PAGE_SIZE));
 
 
-    // function count() {
-    //     axios.get(`${baseURL}/count`)
+    //ordenacao
+    
+
+    useEffect(() => {
+        axios.all([
+            axios.get((`${baseURL}/pagination/${currentPage}`)),
+            axios.get((`${baseURL}/count`)),
+           // axios.get(`${baseURL}/}`)
+            
+        ])
+         .then(axios.spread((responseData,responseCount) => {
+             setProdutos(responseData.data)
+             setTotalProducts(responseCount.data)
+             console.log(produtos)
+             setLoad(false)
+             
+         }))
+         .catch((error) => {
+             console.error(error);
+         });
+
+ },[currentPage]);
+
+
+    // useEffect(() => {
+    //        axios.get(`${baseURL}/pagination/${currentPage}`)
     //         .then((response) => {
-    //             console.log(response.data)
-    //             totProducts = response.data
-
+    //             setProdutos(response.data)
+    //             setTotalProducts(response.data)
+    //             setLoad(false)
+    //             //count()
     //         })
     //         .catch((error) => {
     //             console.error(error);
     //         });
-    //     const maxPages = 3;
-    //     const productsPage = 10;
-    //     actual= 6;
-    //     const maxPagesLeft = (maxPages -1 ) / 2;
-    //     const pageActual = actual ? ((actual / productsPage) +1) : 1;
-    //     const pages = Math.ceil(totProducts/productsPage);
-    //     const page = Math.max(pageActual - maxPagesLeft, 1);
-    // }
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-    //const sortedProducts = produtos.sort((a, b) => a.name.localeCompare(b.name));
-    const totalPages = Math.ceil(filterProduct.length / PAGE_SIZE);
-    const startIndex = (currentPage - 1) * PAGE_SIZE;
-    const productsToDisplay = filterProduct.slice(startIndex, startIndex + PAGE_SIZE);
+
+    // }, []);
 
 
-    //ordenacao
-
-
-
-    useEffect(() => {
-        axios.get(baseURL)
-            .then((response) => {
-                console.log(response.length)
-                setProdutos(response.data)
-                setLoad(false)
-                //count()
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-
-    }, []);
 
     useEffect(() => {
         filterProducts();
-        setCurrentPage(1)
         
     }, [desc, ref, fab, produtos])
 
     function filterProducts() {
         const filterProduct = produtos.filter((produto) => {
-            console.log(desc)
             if (desc === "" && ref === "" && fab === "") {
-                return true;
+                return false;
             }
             if (desc && !produto.nome.toLowerCase().includes(desc.toLowerCase())) {
                 return false;
@@ -113,10 +120,8 @@ const RenderListProduct = () => {
             if (fab && !produto.fabricante.toLowerCase().includes(fab.toLowerCase())) {
                 return false;
             }
-            console.log(produtos)
             return true;
         });
-        console.log(filterProduct)
         setFilterProduct(filterProduct);
     }
     const clearFilter = () => {
@@ -124,7 +129,6 @@ const RenderListProduct = () => {
         setFab('')
         setRef('')
     }
-
 
     //Deletar Produto
     function deleteProdutos(id) {
@@ -217,7 +221,6 @@ const RenderListProduct = () => {
                                     </Link>
                                     <RiDeleteBin7Fill style={{ width: '22px', height: '22px', color: 'red', pd: '5px', cursor: 'pointer' }} onClick={() => deleteProdutos(produto.id)} />
                                     <Spacer />
-
                                 </Flex>
                                 </Td>
                             </Tr>

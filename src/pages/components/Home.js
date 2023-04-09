@@ -11,8 +11,8 @@ const Home = () => {
             justifyContent="center"
             alignItems="center"
             minHeight="100vh"
-            backgroundImage="url(https://cdn.pixabay.com/photo/2018/03/10/12/00/teamwork-3213924_960_720.jpg)"
-            color='white'
+            
+            
             >
             <List
             >
