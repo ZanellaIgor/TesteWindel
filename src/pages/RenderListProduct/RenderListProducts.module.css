@@ -33,10 +33,11 @@
     text-align: left;
     margin: auto;
     margin-left: 0px;
-    
-    /* ajuste o valor conforme necessário */
-    
-    
+}
+
+.tdValor {
+    text-align:right;
+    justify-content: right;
 }
 
 .containerProduto:hover {

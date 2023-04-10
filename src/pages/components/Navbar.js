@@ -22,8 +22,8 @@ const Navbar = () => {
                 margin='5px'
             >
                 {navItens.map((navIten) => (
-                    <Link to={navIten.link}>
-                        <ListItem key={navIten.index}
+                    <Link  key={navIten.index} to={navIten.link}>
+                        <ListItem 
                             padding='10px'
                             margin='5px'
                             align="left"

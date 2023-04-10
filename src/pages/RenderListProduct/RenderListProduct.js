@@ -55,11 +55,32 @@ const RenderListProduct = () => {
 
 
     //ordenacao
+    const [orderedProducts, setOrderedProducts] = useState([]);
+    
+    // const orderBy = (field, order) => {
+    //     const sortedProducts = [...productsToDisplay].sort((a, b) => {
+    //       if (field === 'valorVenda') {
+    //         return order === 'asc' ? parseFloat(a.valorVenda - b.valorVenda) : parseFloat(b.valorVenda - a.valorVenda);
+    //       }
+    //       if (field === 'estoque') {
+    //         return order === 'asc' ? a.estoque - b.estoque : b.estoque - a.estoque;
+    //       }
+    //       return 0;
+    //     });
+    //     setOrderedProducts(sortedProducts);
+    //   };
+/*onClick={() => handleSort('valorVenda')}*/
+    //   const handleSort = (field) => {
+    //     const isAsc = orderedProducts.length > 0 && orderedProducts[0][field] < orderedProducts[orderedProducts.length - 1][field];
+    //     const order = isAsc ? 'desc' : 'asc';
+    //     orderBy(field, order);
+    //   };
 
     // URL
     const baseURL = "https://homologacao.windel.com.br:3000/teste-front"
 
     const inputRef = useRef(null)
+
     useEffect(() => {
         axios.all([
             axios.get((`${baseURL}/pagination/${currentPage}`)),
@@ -84,6 +105,7 @@ const RenderListProduct = () => {
         filterProducts();
         setCurrentPage(1);
     }, [desc, ref, fab])
+    
 
     function filterProducts() {
         const filterProduct = productsFilter.filter((produto) => {
@@ -112,7 +134,7 @@ const RenderListProduct = () => {
     //Deletar Produto
     function deleteProdutos(id) {
         if (window.confirm('Tem certeza que deseja deletar este Produto?')) {
-            console.log(baseURL)
+
             axios.delete(`${baseURL}/${id}`)
                 .then(response => {
                     console.log(response.data)
@@ -128,8 +150,7 @@ const RenderListProduct = () => {
     }
 
     return (
-        <Box
-        >
+        <Box>
             <Flex justifyContent='space-between' m='10px' p='10px'>
                 <Heading as='h3'>Produtos:</Heading>
                 <Link to='/Produtos/Criar_Produto'><Button colorScheme='green'>Adicionar Produto</Button></Link>
@@ -178,9 +199,9 @@ const RenderListProduct = () => {
                             <th >Imagem</th>
                             <th>Nome do Produto</th>
                             <th>Referência</th>
-                            <th /*onClick={() => ordernar(this, true)}*/> <span> Valor de Venda</span></th>
+                            <th > <span> Valor de Venda</span></th>
                             <th>Fabricante</th>
-                            <th /*onClick={() => ordernar(this, true)}*/>Estoque</th>
+                            <th >Estoque</th>
                             <th> <FaListUl /> <BsFillGridFill /> </th>
                         </tr>
                     </thead>
@@ -191,6 +212,7 @@ const RenderListProduct = () => {
                                 Produto deletado com sucesso!
                             </Alert>
                         )}
+                        {/* {(orderedProducts.length > 0 ? orderedProducts : productsToDisplay).map(produto => ( */}
                         {productsToDisplay.map(produto => (
                             <tr className={styles.containerProduto}
                                 key={produto.id}
@@ -198,9 +220,9 @@ const RenderListProduct = () => {
                                 <td><Image src={produto.imagemProduto} alt="Imagem do Produto" h='64px' w='64px' /></td>
                                 <td maxLength='6'>{produto.nome}</td>
                                 <td>{produto.referencia}</td>
-                                <td>{produto.valorVenda}</td>
+                                <td>R$ {parseFloat(produto.valorVenda).toFixed(2)}</td>
                                 <td>{produto.fabricante}</td>
-                                <td>{produto.estoque} {produto.unidadeMedida}</td>
+                                <td className={styles.tdValor}>{produto.estoque} {produto.unidadeMedida}</td>
                                 <td><Flex alignItems="center">
                                     <Link to={`/Produtos/Editar_Produto/${produto.id}`}>
                                         <FiEdit style={{ width: '22px', height: '22px', color: 'brown', margin: '5px' }} />
