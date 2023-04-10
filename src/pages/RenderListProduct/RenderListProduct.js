@@ -42,6 +42,7 @@ const RenderListProduct = () => {
         setLoad(true);
         setCurrentPage(pageNumber);
         inputRef.current.focus();
+        setOrderedProducts("")
     };
     //const sortedProducts = produtos.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -57,25 +58,31 @@ const RenderListProduct = () => {
     //ordenacao
     const [orderedProducts, setOrderedProducts] = useState([]);
     
-    // const orderBy = (field, order) => {
-    //     const sortedProducts = [...productsToDisplay].sort((a, b) => {
-    //       if (field === 'valorVenda') {
-    //         return order === 'asc' ? parseFloat(a.valorVenda - b.valorVenda) : parseFloat(b.valorVenda - a.valorVenda);
-    //       }
-    //       if (field === 'estoque') {
-    //         return order === 'asc' ? a.estoque - b.estoque : b.estoque - a.estoque;
-    //       }
-    //       return 0;
-    //     });
-    //     setOrderedProducts(sortedProducts);
-    //   };
-/*onClick={() => handleSort('valorVenda')}*/
-    //   const handleSort = (field) => {
-    //     const isAsc = orderedProducts.length > 0 && orderedProducts[0][field] < orderedProducts[orderedProducts.length - 1][field];
-    //     const order = isAsc ? 'desc' : 'asc';
-    //     orderBy(field, order);
-    //   };
+    //condição de render
+    const produtosRender = (orderedProducts.length > 0) ? orderedProducts : productsToDisplay
+    
+    const orderBy = (field, order) => {
+        const sortedProducts = [...productsToDisplay].sort((a, b) => {
+          if (field === 'valorVenda') {
+            return order === 'asc' ? parseFloat(a.valorVenda - b.valorVenda) : parseFloat(b.valorVenda - a.valorVenda);
+          }
+          if (field === 'estoque') {
+            return order === 'asc' ? a.estoque - b.estoque : b.estoque - a.estoque;
+          }
+          return 0;
+        });
+        setOrderedProducts(sortedProducts);
+      };
 
+
+      const handleSort = (field) => {
+        const isAsc = orderedProducts.length > 0 && orderedProducts[0][field] < orderedProducts[orderedProducts.length - 1][field];
+        const order = isAsc ? 'desc' : 'asc';
+        orderBy(field, order);
+      };
+
+
+    /*onClick={() => handleSort('valorVenda')}*/
     // URL
     const baseURL = "https://homologacao.windel.com.br:3000/teste-front"
 
@@ -199,9 +206,9 @@ const RenderListProduct = () => {
                             <th >Imagem</th>
                             <th>Nome do Produto</th>
                             <th>Referência</th>
-                            <th > <span> Valor de Venda</span></th>
+                            <th onClick={() => handleSort('valorVenda')}> <span> Valor de Venda</span></th>
                             <th>Fabricante</th>
-                            <th >Estoque</th>
+                            <th onClick={() => handleSort('estoque')}>Estoque</th>
                             <th> <FaListUl /> <BsFillGridFill /> </th>
                         </tr>
                     </thead>
@@ -213,7 +220,7 @@ const RenderListProduct = () => {
                             </Alert>
                         )}
                         {/* {(orderedProducts.length > 0 ? orderedProducts : productsToDisplay).map(produto => ( */}
-                        {productsToDisplay.map(produto => (
+                        {produtosRender.map(produto => (
                             <tr className={styles.containerProduto}
                                 key={produto.id}
                             >
