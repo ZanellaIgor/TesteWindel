@@ -1,22 +1,10 @@
+//stiles
+import styles from "./RenderListProducts.module.css"
 import {
-    Table,
-    Thead,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    Input,
-    Flex,
-    FormLabel,
-    Heading,
-    Image,
-    Box,
-    Spacer,
-    Button,
-    CircularProgress, CircularProgressLabel, Center
+    Input, Flex, FormLabel, Heading, Image, Box, Spacer, Button, CircularProgress, CircularProgressLabel, Center, Alert, AlertIcon
 } from '@chakra-ui/react'
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 
 
@@ -39,17 +27,21 @@ const RenderListProduct = () => {
     //Filter dos produtos
     const [filterProduct, setFilterProduct] = useState([])
     const [productsFilter, setProductsFilter] = useState([])
+    
     //Paginação
     const [currentPage, setCurrentPage] = useState(1);
     const [totalProducts, setTotalProducts] = useState("");
 
-
+    //load
     const [load, setLoad] = useState(true)
-    const baseURL = "https://homologacao.windel.com.br:3000/teste-front"
 
+    //alert
+    const [showAlert, setShowAlert] = useState(false);
+    
     const handlePageChange = (pageNumber) => {
-        setLoad(true)
+        setLoad(true);
         setCurrentPage(pageNumber);
+        inputRef.current.focus();
     };
     //const sortedProducts = produtos.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -64,7 +56,10 @@ const RenderListProduct = () => {
 
     //ordenacao
 
+    // URL
+    const baseURL = "https://homologacao.windel.com.br:3000/teste-front"
 
+    const inputRef = useRef(null)
     useEffect(() => {
         axios.all([
             axios.get((`${baseURL}/pagination/${currentPage}`)),
@@ -83,23 +78,7 @@ const RenderListProduct = () => {
                 console.error(error);
             });
 
-    }, [currentPage]);
-
-    // useEffect(() => {
-    //        axios.get(`${baseURL}/pagination/${currentPage}`)
-    //         .then((response) => {
-    //             setProdutos(response.data)
-    //             setTotalProducts(response.data)
-    //             setLoad(false)
-    //             //count()
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         });
-
-    // }, []);
-
-
+    }, [currentPage], [produtos]);
 
     useEffect(() => {
         filterProducts();
@@ -108,9 +87,6 @@ const RenderListProduct = () => {
 
     function filterProducts() {
         const filterProduct = productsFilter.filter((produto) => {
-            // if (desc === "" && ref === "" && fab === "") {
-            //     return false;
-            // }
             if (desc && !produto.nome.toLowerCase().includes(desc.toLowerCase())) {
                 return false;
             }
@@ -121,11 +97,13 @@ const RenderListProduct = () => {
                 return false;
             }
             return true;
-            
+
         });
         setFilterProduct(filterProduct);
     }
+
     const clearFilter = () => {
+        inputRef.current.focus()
         setDesc('')
         setFab('')
         setRef('')
@@ -138,6 +116,12 @@ const RenderListProduct = () => {
             axios.delete(`${baseURL}/${id}`)
                 .then(response => {
                     console.log(response.data)
+                    inputRef.current.focus()
+                    setProdutos(produtos.filter(produto => produto.id !== id))
+                    setShowAlert(true)
+                    setTimeout(() => {
+                        setShowAlert(false)
+                    }, 10000);
                 })
                 .catch(error => console.log(error))
         }
@@ -148,8 +132,9 @@ const RenderListProduct = () => {
         >
             <Flex justifyContent='space-between' m='10px' p='10px'>
                 <Heading as='h3'>Produtos:</Heading>
-                <Link to='/Produtos/Criar_Produto'><Button>Adicionar Produto</Button></Link>
+                <Link to='/Produtos/Criar_Produto'><Button colorScheme='green'>Adicionar Produto</Button></Link>
             </Flex>
+
             <Flex
                 justifyContent='space-between'
                 border='1px solid black'
@@ -157,21 +142,23 @@ const RenderListProduct = () => {
                 m='10px'
                 p='10px'>
 
-                <FormLabel w='312px'>
+                <FormLabel maxW='312px'>
                     Descrição:
-                    <Input type="text" value={desc} onChange={(e) => setDesc(e.target.value)} />
+                    <Input type="text" value={desc} onChange={(e) => setDesc(e.target.value)} ref={inputRef} />
                 </FormLabel>
-                <FormLabel w='312px'>
+                <FormLabel maxW='312px'>
                     Referência:
                     <Input type="text" value={ref} onChange={(e) => setRef(e.target.value)} />
                 </FormLabel>
-                <FormLabel w='312px'>
+                <FormLabel maxW='312px'>
                     Fabricante:
                     <Input type="text" value={fab} onChange={(e) => setFab(e.target.value)} />
                 </FormLabel>
 
-                <Button mt='22px' onClick={clearFilter}>Limpar Filtros</Button>
+                <Button mt='22px' onClick={clearFilter} colorScheme='red'>Limpar Filtros</Button>
+
             </Flex>
+
 
             {load && <Center>
                 <CircularProgress isIndeterminate color='green.300' size='250px'>
@@ -184,50 +171,49 @@ const RenderListProduct = () => {
                 m='10px'
                 p='10px'
             >
-                <Table
+                <table width="100%" tableLayout="auto"
                 >
-                    <Thead>
-                        <Tr>
-                            <Th >Imagem</Th>
-                            <Th>Nome do Produto</Th>
-                            <Th>Referência</Th>
-                            <Th /*onClick={() => ordernar(This, true)}*/> <span> Valor de Venda</span></Th>
-                            <Th>Fabricante</Th>
-                            <Th /*onClick={() => ordernar(This, true)}*/>Estoque</Th>
-                            <Th> <FaListUl /> <BsFillGridFill /> </Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-
+                    <thead className={styles.containerHead}>
+                        <tr className={styles.containerCabecalho}>
+                            <th >Imagem</th>
+                            <th>Nome do Produto</th>
+                            <th>Referência</th>
+                            <th /*onClick={() => ordernar(this, true)}*/> <span> Valor de Venda</span></th>
+                            <th>Fabricante</th>
+                            <th /*onClick={() => ordernar(this, true)}*/>Estoque</th>
+                            <th> <FaListUl /> <BsFillGridFill /> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {showAlert && (
+                            <Alert status="success" mb={4}>
+                                <AlertIcon />
+                                Produto deletado com sucesso!
+                            </Alert>
+                        )}
                         {productsToDisplay.map(produto => (
-                            <Tr
+                            <tr className={styles.containerProduto}
                                 key={produto.id}
-
-                                borderRadius='8px'
-                                _hover={{
-                                    bg: 'cyan.400',
-                                    color: 'white',
-                                    bd: "lg",
-                                }}
                             >
-                                <Td><Image src={produto.imagemProduto} alt="Imagem do Produto" h='64px' w='64px' /></Td>
-                                <Td>{produto.nome}</Td>
-                                <Td>{produto.referencia}</Td>
-                                <Td>{produto.valorVenda}</Td>
-                                <Td>{produto.fabricante}</Td>
-                                <Td>{produto.estoque} {produto.unidadeMedida}</Td>
-                                <Td><Flex alignItems="center">
+                                <td><Image src={produto.imagemProduto} alt="Imagem do Produto" h='64px' w='64px' /></td>
+                                <td maxLength='6'>{produto.nome}</td>
+                                <td>{produto.referencia}</td>
+                                <td>{produto.valorVenda}</td>
+                                <td>{produto.fabricante}</td>
+                                <td>{produto.estoque} {produto.unidadeMedida}</td>
+                                <td><Flex alignItems="center">
                                     <Link to={`/Produtos/Editar_Produto/${produto.id}`}>
                                         <FiEdit style={{ width: '22px', height: '22px', color: 'brown', margin: '5px' }} />
                                     </Link>
                                     <RiDeleteBin7Fill style={{ width: '22px', height: '22px', color: 'red', pd: '5px', cursor: 'pointer' }} onClick={() => deleteProdutos(produto.id)} />
                                     <Spacer />
                                 </Flex>
-                                </Td>
-                            </Tr>
+                                </td>
+                            </tr>
                         ))}
-                    </Tbody>
-                </Table>
+                    </tbody>
+                </table>
+
                 <div>
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                         <Button key={page}

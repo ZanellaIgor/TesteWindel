@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FormLabel, Input, Box, FormControl, Button, Grid, Flex, Spacer, Heading, Image } from '@chakra-ui/react'
+import { FormLabel, Input, Box, FormControl, Button, Flex, Spacer, Heading, Image, Alert, AlertIcon } from '@chakra-ui/react'
 
 
 const EditProduct = () => {
@@ -15,8 +15,11 @@ const EditProduct = () => {
 
     const { id } = useParams();
     const navigate = useNavigate()
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [error, setError] = useState("");
+
     const alterInputsProducts = (produtos) => {
-        console.log(produtos)
         const produto = produtos
         setDescProduto(produto.nome)
         setVlrVenda(produto.valorVenda)
@@ -29,16 +32,33 @@ const EditProduct = () => {
     }
 
     const handleEditProduct = () => {
-        console.log(produto)
+        if (produto.nome.length == 0 || produto.nome.length >= 60) {
+            return setError("O campo deve Descrição do Produto deve conter entre 1 a 60 caracteres")
+        }
+        if (produto.valorVenda.length == 0 || isNaN(produto.valorVenda)) {
+            return setError("Favor informar o Valor de Venda")
+        }
+        if (produto.unidadeMedida.length == 0) {
+            return setError("O campo Unidade de medida não ser cadastrado em branco")
+        }
+        if (produto.estoque.length == 0 || isNaN(produto.estoque)) {
+            return setError("O campo Estoque não deve ir vazio")
+        }
+        setError("")
+
+        
         axios.patch(`${baseURL}/${id}`, produto)
             .then(response => {
                 console.log(response)
-                navigate("/")
+                setShowAlert(true)
+                setTimeout(() => {
+                    navigate("/Produtos")
+                }, 1000);
             })
             .catch(error => {
-                console.log(error)
+                setError(error)
             })
-        console.log("foi1")
+        
     }
     const produto = {
         nome: descProduto,
@@ -152,18 +172,27 @@ const EditProduct = () => {
                 <FormControl
                     display='flex'
                     justifyContent="space-between">
-                    <Button alignSelf="flex-end" type='button' onClick={handleEditProduct}>Editar</Button>
+                    <Button alignSelf="flex-end" type='button' onClick={handleEditProduct} colorScheme='green'>Editar</Button>
                 </FormControl>
-                <Image 
+               
+                {error && <Alert status='error' mb={4}>
+                        <AlertIcon /> {error}
+                    </Alert>}
+                    {showAlert && (
+                        <Alert status="success" mb={4}>
+                            <AlertIcon />
+                            Produto criado com sucesso!
+                        </Alert>
+                    )}
+                
+            </form>
+            <Image 
                 display='flex'
                 src={produto.imagemProduto} boxSize='200px' 
                 border='1px solid black'
                 borderRadius='8px'
                 justifyContent='center'
                 />
-                
-            </form>
-          
             </Flex>
 
         </Flex>

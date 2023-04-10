@@ -12,7 +12,6 @@ const Home = () => {
             alignItems="center"
             minHeight="100vh"
             
-            
             >
             <List
             >

@@ -1,0 +1,44 @@
+.containerHead {
+    
+    margin-top: 10px;
+    padding: 10px;
+    
+    margin: auto;
+    text-align: left;
+    
+}
+
+.containerCabecalho {
+    display: grid;
+    border-radius: 6px;
+    grid-template-columns: 1fr 5fr 1fr 1fr 1fr 1fr 1fr;
+    margin: auto;
+    border-bottom: #FFFFFF;
+    text-align: left;
+    padding: 10px;
+
+}
+
+.containerProduto {
+    background: #E2E8F0;
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr 1fr 1fr 1fr 1fr;
+    margin-bottom: 10px;
+    padding: 5px;
+
+}
+.containerProduto td {
+    padding: 5px;
+    text-align: left;
+    margin: auto;
+    margin-left: 0px;
+    
+    /* ajuste o valor conforme necessário */
+    
+    
+}
+
+.containerProduto:hover {
+    background-color: #B8D6FF;
+}
