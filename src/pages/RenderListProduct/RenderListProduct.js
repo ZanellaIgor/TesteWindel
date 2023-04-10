@@ -9,9 +9,9 @@ import axios from "axios";
 
 
 //icons
-import { BsFillGridFill } from 'react-icons/bs';
+
 import { RiDeleteBin7Fill } from 'react-icons/ri';
-import { FaListUl } from 'react-icons/fa'
+
 import { FiEdit } from 'react-icons/fi'
 import { Link } from "react-router-dom";
 
@@ -27,7 +27,7 @@ const RenderListProduct = () => {
     //Filter dos produtos
     const [filterProduct, setFilterProduct] = useState([])
     const [productsFilter, setProductsFilter] = useState([])
-    
+
     //Paginação
     const [currentPage, setCurrentPage] = useState(1);
     const [totalProducts, setTotalProducts] = useState("");
@@ -37,7 +37,7 @@ const RenderListProduct = () => {
 
     //alert
     const [showAlert, setShowAlert] = useState(false);
-    
+
     const handlePageChange = (pageNumber) => {
         setLoad(true);
         setCurrentPage(pageNumber);
@@ -57,29 +57,29 @@ const RenderListProduct = () => {
 
     //ordenacao
     const [orderedProducts, setOrderedProducts] = useState([]);
-    
+
     //condição de render
     const produtosRender = (orderedProducts.length > 0) ? orderedProducts : productsToDisplay
-    
+
     const orderBy = (field, order) => {
         const sortedProducts = [...productsToDisplay].sort((a, b) => {
-          if (field === 'valorVenda') {
-            return order === 'asc' ? parseFloat(a.valorVenda - b.valorVenda) : parseFloat(b.valorVenda - a.valorVenda);
-          }
-          if (field === 'estoque') {
-            return order === 'asc' ? a.estoque - b.estoque : b.estoque - a.estoque;
-          }
-          return 0;
+            if (field === 'valorVenda') {
+                return order === 'asc' ? parseFloat(a.valorVenda - b.valorVenda) : parseFloat(b.valorVenda - a.valorVenda);
+            }
+            if (field === 'estoque') {
+                return order === 'asc' ? a.estoque - b.estoque : b.estoque - a.estoque;
+            }
+            return 0;
         });
         setOrderedProducts(sortedProducts);
-      };
+    };
 
 
-      const handleSort = (field) => {
+    const handleSort = (field) => {
         const isAsc = orderedProducts.length > 0 && orderedProducts[0][field] < orderedProducts[orderedProducts.length - 1][field];
         const order = isAsc ? 'desc' : 'asc';
         orderBy(field, order);
-      };
+    };
 
 
     /*onClick={() => handleSort('valorVenda')}*/
@@ -110,9 +110,10 @@ const RenderListProduct = () => {
 
     useEffect(() => {
         filterProducts();
+        setOrderedProducts("")
         setCurrentPage(1);
     }, [desc, ref, fab])
-    
+
 
     function filterProducts() {
         const filterProduct = productsFilter.filter((produto) => {
@@ -136,6 +137,7 @@ const RenderListProduct = () => {
         setDesc('')
         setFab('')
         setRef('')
+        setOrderedProducts("")
     }
 
     //Deletar Produto
@@ -209,7 +211,7 @@ const RenderListProduct = () => {
                             <th onClick={() => handleSort('valorVenda')}> <span> Valor de Venda</span></th>
                             <th>Fabricante</th>
                             <th onClick={() => handleSort('estoque')}>Estoque</th>
-                            <th> <FaListUl /> <BsFillGridFill /> </th>
+                            <th> </th>
                         </tr>
                     </thead>
                     <tbody>

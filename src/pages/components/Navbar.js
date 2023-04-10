@@ -6,7 +6,6 @@ const navItens = [
     {name: 'Home', icon: '', link: '/', },
     {name: 'Criar Produtos', icon: '', link: '/Produtos/Criar_Produto' },
     {name: 'Lista de Produtos', icon: '', link: '/Produtos' },
-    {name: 'Grafico', icon: '', link: 'Grafico', },
     {name: 'About', icon: '', link: '/About', },
     {name: 'Sair', icon: '', link: "", },
 ];
